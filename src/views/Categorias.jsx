@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button, Spinner } from "react-bootstrap";
 import { supabase } from "../assets/database/supabaseconfig";
 
+import TarjetaCategoria from "../components/categorias/TarjetaCategoria";
 import ModalRegistroCategoria from "../components/categorias/ModalRegistroCategoria";
 import ModalEdicionCategoria from "../components/categorias/ModalEdicionCategoria";
 import ModalEliminacionCategoria from "../components/categorias/ModalEliminacionCategoria";
@@ -171,6 +172,13 @@ const Categorias = () => {
       {/* Lista de categorías cargadas */}
       {!cargando && categorias.length > 0 && (
         <Row>
+          <Col xs={12} sm={12} md={12} className="d-lg-none">
+            <TarjetaCategoria
+              categorias={categorias}
+              abrirModalEdicion={abrirModalEdicion}
+              abrirModalEliminacion={abrirModalEliminacion}
+            />
+          </Col>
           <Col lg={12} className="d-none d-lg-block">
             <TablaCategorias
               categorias={categorias}

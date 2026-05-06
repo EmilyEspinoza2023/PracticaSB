@@ -26,7 +26,7 @@ const TablaCategorias = ({
             <Spinner animation="border" variant="success" role="status" />
           </div>
         ) : (
-          <Table striped borderless hover responsive size="sm">
+          <Table striped borderless hover responsive size="sm" className="app-tabla mb-0">
             <thead>
               <tr>
                 <th>ID</th>

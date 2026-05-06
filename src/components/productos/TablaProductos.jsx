@@ -2,7 +2,7 @@ import React from "react";
 import { Table, Button } from "react-bootstrap";
 
 const TablaProductos = ({ productos, abrirModalEdicion, abrirModalEliminacion }) => (
-  <Table striped borderless hover responsive size="sm">
+  <Table striped borderless hover responsive size="sm" className="app-tabla mb-0">
     <thead>
       <tr>
         <th>ID</th>

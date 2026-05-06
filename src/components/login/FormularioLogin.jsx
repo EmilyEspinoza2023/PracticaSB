@@ -1,43 +1,62 @@
 import React from "react";
-import { Form, Button, Card, Alert } from "react-bootstrap";
+import { Form, Button, Alert } from "react-bootstrap";
+import logo from "../../assets/logo.png";
 
 const FormularioLogin = ({ usuario, contrasena, error, setUsuario, setContrasena, iniciarSesion }) => {
+  const manejarEnter = (e) => {
+    if (e.key === "Enter") iniciarSesion();
+  };
+
   return (
-    <Card style={{ minWidth: "320px", maxWidth: "400px", width: "100%" }} className="p-4 shadow-lg">
-      <Card.Body>
-        <h3 className="text-center mb-4">Iniciar Sesión</h3>
+    <div className="login-card">
+      <div className="login-card-header">
+        <img src={logo} alt="Logo" className="login-logo" />
+        <h3>Discosa</h3>
+        <p>Sistema de gestión de productos</p>
+      </div>
 
-        {error && <Alert variant="danger">{error}</Alert>}
+      <div className="login-card-body">
+        {error && (
+          <Alert variant="danger" className="py-2 small">
+            <i className="bi bi-exclamation-triangle-fill me-2"></i>
+            {error}
+          </Alert>
+        )}
 
-        <Form>
-          <Form.Group className="mb-3" controlId="usuario">
-            <Form.Label>Usuario</Form.Label>
+        <Form onKeyDown={manejarEnter}>
+          <Form.Group className="mb-3">
+            <Form.Label className="fw-semibold small">
+              <i className="bi bi-envelope me-1"></i> Correo electrónico
+            </Form.Label>
             <Form.Control
-              type="text"
-              placeholder="Ingresa tu usuario"
+              type="email"
+              placeholder="correo@ejemplo.com"
               value={usuario}
               onChange={(e) => setUsuario(e.target.value)}
-              required
+              autoComplete="email"
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="contrasena">
-            <Form.Label>Contraseña</Form.Label>
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold small">
+              <i className="bi bi-lock me-1"></i> Contraseña
+            </Form.Label>
             <Form.Control
               type="password"
-              placeholder="Ingresa tu contraseña"
+              placeholder="••••••••"
               value={contrasena}
               onChange={(e) => setContrasena(e.target.value)}
-              required
+              autoComplete="current-password"
             />
           </Form.Group>
 
-          <Button variant="primary" className="w-100" onClick={iniciarSesion}>
+          <Button className="w-100" onClick={iniciarSesion} size="lg">
+            <i className="bi bi-box-arrow-in-right me-2"></i>
             Iniciar Sesión
           </Button>
         </Form>
-      </Card.Body>
-    </Card>
+      </div>
+    </div>
   );
 };
 

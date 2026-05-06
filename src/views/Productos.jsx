@@ -45,34 +45,30 @@ const Productos = () => {
   } = useProductos();
 
   return (
-    <Container className="mt-3">
+    <Container className="mt-3 mb-5">
       {/* Título y botón */}
-      <Row className="align-items-center mb-3">
-        <Col xs={9} sm={7} md={7} lg={7} className="d-flex align-items-center">
-          <h3 className="mb-0">
-            <i className="bi-box-fill me-2"></i> Productos
-          </h3>
-        </Col>
-        <Col xs={3} sm={5} md={5} lg={5} className="text-end">
-          <Button onClick={() => setMostrarModalRegistro(true)} size="md">
-            <i className="bi-plus-lg"></i>
-            <span className="d-none d-sm-inline ms-2">Nuevo Producto</span>
-          </Button>
-        </Col>
-      </Row>
-
-      <hr />
+      <div className="app-seccion-header d-flex justify-content-between align-items-center">
+        <h3>
+          <i className="bi-box-fill me-2"></i> Productos
+        </h3>
+        <Button onClick={() => setMostrarModalRegistro(true)}>
+          <i className="bi-plus-lg me-1"></i>
+          <span className="d-none d-sm-inline">Nuevo Producto</span>
+        </Button>
+      </div>
 
       {/* Búsqueda */}
-      <Row className="mb-4">
-        <Col md={6} lg={5}>
-          <CuadroBusquedas
-            textoBusqueda={textoBusqueda}
-            manejarCambioBusqueda={manejarCambioBusqueda}
-            placeholder="Buscar por nombre o descripción..."
-          />
-        </Col>
-      </Row>
+      <div className="app-filtros">
+        <Row>
+          <Col md={6} lg={5}>
+            <CuadroBusquedas
+              textoBusqueda={textoBusqueda}
+              manejarCambioBusqueda={manejarCambioBusqueda}
+              placeholder="Buscar por nombre o descripción..."
+            />
+          </Col>
+        </Row>
+      </div>
 
       {/* Sin resultados */}
       {!cargando && textoBusqueda.trim() && productosFiltrados.length === 0 && (
@@ -90,7 +86,7 @@ const Productos = () => {
       {cargando && (
         <Row className="text-center my-5">
           <Col>
-            <Spinner animation="border" variant="primary" />
+            <Spinner animation="border" style={{ color: "var(--rojo)" }} />
             <p className="mt-3 text-muted">Cargando productos...</p>
           </Col>
         </Row>

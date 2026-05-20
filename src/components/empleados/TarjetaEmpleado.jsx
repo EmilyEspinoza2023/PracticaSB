@@ -51,16 +51,20 @@ const TarjetaEmpleado = ({ empleados, abrirModalEdicion, abrirModalEliminacion }
                   </div>
                 </Col>
 
-                <Col xs={5} className="text-start">
+                <Col className="text-start">
                   <div className="fw-semibold text-truncate">
                     {empleado.nombre_empleado} {empleado.apellido_empleado}
                   </div>
                   <div className="small text-muted text-truncate">
-                    {empleado.tipo_empleado}
+                    {empleado.email || "-"}
+                  </div>
+                  <div className="small text-muted">
+                    {empleado.celular || "-"}
                   </div>
                 </Col>
 
-                <Col xs={5} className="d-flex flex-column align-items-end justify-content-center text-end">
+                <Col xs="auto" className="d-flex flex-column align-items-end justify-content-center text-end">
+                  <div className="small text-muted">{empleado.tipo_empleado}</div>
                   <div className="fw-semibold small">Activo</div>
                 </Col>
               </Row>

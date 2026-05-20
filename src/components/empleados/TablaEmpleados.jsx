@@ -10,6 +10,8 @@ const TablaEmpleados = ({ empleados, abrirModalEdicion, abrirModalEliminacion })
           <th>ID</th>
           <th>Nombre</th>
           <th>Apellido</th>
+          <th className="d-none d-md-table-cell">Correo</th>
+          <th className="d-none d-md-table-cell">Celular</th>
           <th className="d-none d-md-table-cell">Tipo</th>
           <th className="text-center">Acciones</th>
         </tr>
@@ -20,6 +22,8 @@ const TablaEmpleados = ({ empleados, abrirModalEdicion, abrirModalEliminacion })
             <td>{empleado.id_empleado}</td>
             <td>{empleado.nombre_empleado}</td>
             <td>{empleado.apellido_empleado}</td>
+            <td className="d-none d-md-table-cell">{empleado.email || "-"}</td>
+            <td className="d-none d-md-table-cell">{empleado.celular || "-"}</td>
             <td className="d-none d-md-table-cell">{empleado.tipo_empleado}</td>
             <td className="text-center">
               <Button

@@ -1,15 +1,23 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
+import { Spinner } from "react-bootstrap";
+import { useAuth } from "../../context/AuthContext";
 
 const RutaProtegida = ({ children }) => {
-  // Verifica si el usuario está autenticado usando localStorage
-  const estaLogueado = !!localStorage.getItem("usuario-supabase");
+  const { usuario, cargando } = useAuth();
 
-  // Log para depuración
-  console.log("Usuario autenticado:", estaLogueado);
+  if (cargando) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "80vh" }}>
+        <div className="text-center">
+          <Spinner animation="border" style={{ color: "var(--rojo)" }} />
+          <p className="mt-3 text-muted">Verificando sesión...</p>
+        </div>
+      </div>
+    );
+  }
 
-  // Si está autenticado, redirige a la página de login
-  return estaLogueado ? children : <Navigate to="/login" replace />;
+  return usuario ? children : <Navigate to="/login" replace />;
 };
 
 export default RutaProtegida;

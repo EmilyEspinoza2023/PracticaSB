@@ -2,7 +2,7 @@ import React from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import logo from "../../assets/logo.png";
 
-const FormularioLogin = ({ usuario, contrasena, error, setUsuario, setContrasena, iniciarSesion }) => {
+const FormularioLogin = ({ usuario, contrasena, error, setUsuario, setContrasena, iniciarSesion, cargando }) => {
   const manejarEnter = (e) => {
     if (e.key === "Enter") iniciarSesion();
   };
@@ -50,9 +50,9 @@ const FormularioLogin = ({ usuario, contrasena, error, setUsuario, setContrasena
             />
           </Form.Group>
 
-          <Button className="w-100" onClick={iniciarSesion} size="lg">
+          <Button className="w-100" onClick={iniciarSesion} size="lg" disabled={cargando}>
             <i className="bi bi-box-arrow-in-right me-2"></i>
-            Iniciar Sesión
+            {cargando ? "Iniciando sesión..." : "Iniciar Sesión"}
           </Button>
         </Form>
       </div>

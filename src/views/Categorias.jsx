@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button, Spinner, Alert } from "react-bootstrap";
 import { supabase } from "../assets/database/supabaseconfig";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 import TarjetaCategoria from "../components/categorias/TarjetaCategoria";
 import ModalRegistroCategoria from "../components/categorias/ModalRegistroCategoria";
@@ -42,6 +44,49 @@ const Categorias = () => {
   const [paginaActual, establecerPaginaActual] = useState(1);
 
   // Métodos de apertura de modales
+  const generarPDFCategoria = (categoria) => {
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.text("Reporte de Categoría", 14, 20);
+    doc.line(14, 25, 195, 25);
+
+    autoTable(doc, {
+      startY: 35,
+      head: [["Campo", "Valor"]],
+      body: [
+        ["ID", categoria.id_categoria],
+        ["Nombre", categoria.nombre_categoria],
+        ["Descripción", categoria.descripcion_categoria || "-"],
+      ],
+    });
+
+    doc.save(`categoria_${categoria.id_categoria}.pdf`);
+  };
+
+  const generarPDFTodas = () => {
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.text("Reporte de Categorías", 14, 20);
+    doc.line(14, 25, 195, 25);
+
+    doc.setFontSize(10);
+    doc.text(`Total de registros: ${categorias.length}`, 14, 32);
+
+    autoTable(doc, {
+      startY: 38,
+      head: [["ID", "Nombre", "Descripción"]],
+      body: categorias.map((c) => [
+        c.id_categoria,
+        c.nombre_categoria,
+        c.descripcion_categoria || "-",
+      ]),
+    });
+
+    doc.save("categorias.pdf");
+  };
+
   const abrirModalEdicion = (categoria) => {
     setCategoriaEditar({
       id_categoria: categoria.id_categoria,
@@ -184,10 +229,16 @@ const Categorias = () => {
         <h3>
           <i className="bi-bookmark-plus-fill me-2"></i> Categorías
         </h3>
-        <Button onClick={() => setMostrarModal(true)}>
-          <i className="bi-plus-lg me-1"></i>
-          <span className="d-none d-sm-inline">Nueva Categoría</span>
-        </Button>
+        <div className="d-flex gap-2">
+          <Button variant="outline-danger" onClick={generarPDFTodas} disabled={categorias.length === 0}>
+            <i className="bi bi-file-earmark-pdf me-1"></i>
+            <span className="d-none d-sm-inline">Exportar PDF</span>
+          </Button>
+          <Button onClick={() => setMostrarModal(true)}>
+            <i className="bi-plus-lg me-1"></i>
+            <span className="d-none d-sm-inline">Nueva Categoría</span>
+          </Button>
+        </div>
       </div>
 
       {/* Búsqueda */}
@@ -240,6 +291,7 @@ const Categorias = () => {
               categorias={categoriasPaginadas}
               abrirModalEdicion={abrirModalEdicion}
               abrirModalEliminacion={abrirModalEliminacion}
+              generarPDFCategoria={generarPDFCategoria}
             />
           </Col>
         </Row>

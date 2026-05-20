@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 
-const TIPOS_EMPLEADO = ["Administrador", "Cajero", "Vendedor", "Supervisor", "Almacén"];
+const TIPOS_EMPLEADO = ["administrador", "cajero", "mesero"];
 
 const ModalRegistroEmpleado = ({
   mostrarModal,
@@ -22,7 +22,8 @@ const ModalRegistroEmpleado = ({
   const camposCompletos =
     nuevoEmpleado.nombre_empleado.trim() !== "" &&
     nuevoEmpleado.apellido_empleado.trim() !== "" &&
-    nuevoEmpleado.pin_acceso.trim() !== "" &&
+    nuevoEmpleado.email.trim() !== "" &&
+    nuevoEmpleado.password.trim() !== "" &&
     nuevoEmpleado.tipo_empleado !== "";
 
   return (
@@ -59,6 +60,36 @@ const ModalRegistroEmpleado = ({
             />
           </Form.Group>
           <Form.Group className="mb-3">
+            <Form.Label>Correo electrónico *</Form.Label>
+            <Form.Control
+              type="email"
+              name="email"
+              value={nuevoEmpleado.email}
+              onChange={manejoCambioInput}
+              placeholder="correo@ejemplo.com"
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Contraseña *</Form.Label>
+            <Form.Control
+              type="password"
+              name="password"
+              value={nuevoEmpleado.password}
+              onChange={manejoCambioInput}
+              placeholder="Contraseña de acceso"
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Celular</Form.Label>
+            <Form.Control
+              type="text"
+              name="celular"
+              value={nuevoEmpleado.celular}
+              onChange={manejoCambioInput}
+              placeholder="Número de celular"
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
             <Form.Label>PIN de acceso</Form.Label>
             <Form.Control
               type="password"
@@ -70,7 +101,7 @@ const ModalRegistroEmpleado = ({
             />
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>Tipo de empleado</Form.Label>
+            <Form.Label>Tipo de empleado *</Form.Label>
             <Form.Select
               name="tipo_empleado"
               value={nuevoEmpleado.tipo_empleado}

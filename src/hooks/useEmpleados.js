@@ -11,7 +11,10 @@ const useEmpleados = () => {
   const [nuevoEmpleado, setNuevoEmpleado] = useState({
     nombre_empleado: "",
     apellido_empleado: "",
+    celular: "",
     pin_acceso: "",
+    email: "",
+    password: "",
     tipo_empleado: "",
   });
 
@@ -89,18 +92,33 @@ const useEmpleados = () => {
       if (
         !nuevoEmpleado.nombre_empleado.trim() ||
         !nuevoEmpleado.apellido_empleado.trim() ||
-        !nuevoEmpleado.pin_acceso.trim() ||
+        !nuevoEmpleado.email.trim() ||
+        !nuevoEmpleado.password.trim() ||
         !nuevoEmpleado.tipo_empleado
       ) {
-        setToast({ mostrar: true, mensaje: "Debe llenar todos los campos.", tipo: "advertencia" });
+        setToast({ mostrar: true, mensaje: "Nombre, apellido, correo, contraseña y tipo son obligatorios.", tipo: "advertencia" });
         return;
       }
+
+      const { error: authError } = await supabase.auth.signUp({
+        email: nuevoEmpleado.email,
+        password: nuevoEmpleado.password,
+      });
+
+      if (authError) {
+        setToast({ mostrar: true, mensaje: authError.message || "Error al crear el usuario.", tipo: "error" });
+        return;
+      }
+
+      await supabase.rpc("confirmar_usuario", { p_email: nuevoEmpleado.email });
 
       const { error } = await supabase.from("empleados").insert([
         {
           nombre_empleado: nuevoEmpleado.nombre_empleado,
           apellido_empleado: nuevoEmpleado.apellido_empleado,
+          celular: nuevoEmpleado.celular,
           pin_acceso: nuevoEmpleado.pin_acceso,
+          email: nuevoEmpleado.email,
           tipo_empleado: nuevoEmpleado.tipo_empleado,
         },
       ]);
@@ -115,7 +133,7 @@ const useEmpleados = () => {
         mensaje: `Empleado "${nuevoEmpleado.nombre_empleado} ${nuevoEmpleado.apellido_empleado}" registrado exitosamente.`,
         tipo: "exito",
       });
-      setNuevoEmpleado({ nombre_empleado: "", apellido_empleado: "", pin_acceso: "", tipo_empleado: "" });
+      setNuevoEmpleado({ nombre_empleado: "", apellido_empleado: "", celular: "", pin_acceso: "", email: "", password: "", tipo_empleado: "" });
       setMostrarModalRegistro(false);
       await cargarEmpleados();
     } catch {

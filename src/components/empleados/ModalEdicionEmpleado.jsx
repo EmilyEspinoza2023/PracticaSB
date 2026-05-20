@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 import { supabase } from "../../assets/database/supabaseconfig";
 
-const TIPOS_EMPLEADO = ["Administrador", "Cajero", "Vendedor", "Supervisor", "Almacén"];
+const TIPOS_EMPLEADO = ["administrador", "cajero", "mesero"];
 
 const ModalEdicionEmpleado = ({
   mostrarModal,
@@ -38,6 +38,7 @@ const ModalEdicionEmpleado = ({
         .update({
           nombre_empleado: empleadoEditar.nombre_empleado,
           apellido_empleado: empleadoEditar.apellido_empleado,
+          celular: empleadoEditar.celular,
           pin_acceso: empleadoEditar.pin_acceso,
           tipo_empleado: empleadoEditar.tipo_empleado,
         })
@@ -106,11 +107,29 @@ const ModalEdicionEmpleado = ({
             />
           </Form.Group>
           <Form.Group className="mb-3">
+            <Form.Label>Correo electrónico</Form.Label>
+            <Form.Control
+              type="email"
+              value={empleadoEditar.email || ""}
+              disabled
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Celular</Form.Label>
+            <Form.Control
+              type="text"
+              name="celular"
+              value={empleadoEditar.celular || ""}
+              onChange={manejoCambioInputEdicion}
+              placeholder="Número de celular"
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
             <Form.Label>PIN de acceso</Form.Label>
             <Form.Control
               type="password"
               name="pin_acceso"
-              value={empleadoEditar.pin_acceso}
+              value={empleadoEditar.pin_acceso || ""}
               onChange={manejoCambioInputEdicion}
               placeholder="Ingresa el PIN"
               maxLength={10}

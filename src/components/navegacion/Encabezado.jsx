@@ -108,6 +108,16 @@ const Encabezado = () => {
               </Nav.Link>
             )}
 
+            {tienePermiso("ver_ventas") && (
+              <Nav.Link
+                onClick={() => manejarNavegacion("/ventas")}
+                className={mostrarMenu ? "color-texto-marca" : "text-white"}
+              >
+                {mostrarMenu ? <i className="bi-receipt-cutoff me-2"></i> : null}
+                <strong>Ventas</strong>
+              </Nav.Link>
+            )}
+
             {tienePermiso("ver_catalogo") && (
               <Nav.Link
                 onClick={() => manejarNavegacion("/catalogo")}

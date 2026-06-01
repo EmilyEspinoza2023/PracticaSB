@@ -3,9 +3,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Container, Nav, Navbar, Offcanvas } from "react-bootstrap";
 import logo from "../../assets/logo.png";
 import { useAuth } from "../../context/AuthContext";
+import ChatIA from "../ia/ChatIA";
 
 const Encabezado = () => {
   const [mostrarMenu, setMostrarMenu] = useState(false);
+  const [mostrarChatIA, setMostrarChatIA] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { tienePermiso, logout, usuario } = useAuth();
@@ -141,6 +143,12 @@ const Encabezado = () => {
             <hr />
 
             {!mostrarMenu && (
+              <Nav.Link onClick={() => setMostrarChatIA(true)} className="text-white">
+                <i className="bi bi-robot me-2"></i>
+              </Nav.Link>
+            )}
+
+            {!mostrarMenu && (
               <Nav.Link onClick={cerrarSesion} className="text-white">
                 <i className="bi-box-arrow-right me-2"></i>
               </Nav.Link>
@@ -171,6 +179,7 @@ const Encabezado = () => {
   }
 
   return (
+    <>
     <Navbar expand="md" fixed="top" className="color-navbar shadow-lg" variant="dark">
       <Container>
 
@@ -217,6 +226,8 @@ const Encabezado = () => {
 
       </Container>
     </Navbar>
+    <ChatIA mostrar={mostrarChatIA} onCerrar={() => setMostrarChatIA(false)} />
+    </>
   );
 };
 

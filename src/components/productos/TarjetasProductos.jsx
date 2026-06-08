@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, Row, Col, Button, Badge } from "react-bootstrap";
 
-const TarjetasProductos = ({ productos, abrirModalEdicion, abrirModalEliminacion }) => {
+const TarjetasProductos = ({ productos, abrirModalEdicion, abrirModalEliminacion, copiarProducto, generarQRImagen }) => {
   const [idTarjetaActiva, setIdTarjetaActiva] = useState(null);
 
   const manejarTeclaEscape = useCallback((e) => {
@@ -109,6 +109,28 @@ const TarjetasProductos = ({ productos, abrirModalEdicion, abrirModalEliminacion
                     aria-label={`Eliminar ${producto.nombre_producto}`}
                   >
                     <i className="bi bi-trash"></i>
+                  </Button>
+                  <Button
+                    variant="outline-success"
+                    size="sm"
+                    onClick={() => {
+                      copiarProducto(producto);
+                      setIdTarjetaActiva(null);
+                    }}
+                    title="Copiar al portapapeles"
+                  >
+                    <i className="bi bi-clipboard"></i>
+                  </Button>
+                  <Button
+                    variant="outline-primary"
+                    size="sm"
+                    onClick={() => {
+                      generarQRImagen(producto);
+                      setIdTarjetaActiva(null);
+                    }}
+                    title="Generar código QR de la imagen"
+                  >
+                    <i className="bi bi-qr-code"></i>
                   </Button>
                 </div>
               </div>

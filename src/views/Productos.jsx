@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, Button, Spinner, Alert } from "react-bootstrap";
 
 import useProductos from "../hooks/useProductos";
@@ -7,6 +7,7 @@ import TablaProductos from "../components/productos/TablaProductos";
 import ModalRegistroProducto from "../components/productos/ModalRegistroProducto";
 import ModalEdicionProducto from "../components/productos/ModalEdicionProducto";
 import ModalEliminacionProducto from "../components/productos/ModalEliminacionProducto";
+import ModalQRProducto from "../components/productos/ModalQRProducto";
 import NotificacionOperacion from "../components/NotificacionOperacion";
 import CuadroBusquedas from "../components/busquedas/CuadroBusquedas";
 import Paginacion from "../components/ordenamiento/Paginacion";
@@ -43,6 +44,42 @@ const Productos = () => {
     abrirModalEdicion,
     abrirModalEliminacion,
   } = useProductos();
+
+  const [mostrarModalQR, setMostrarModalQR] = useState(false);
+  const [productoQR, setProductoQR] = useState(null);
+
+  const generarQRImagen = (producto) => {
+    if (!producto?.imagen_url) {
+      setToast({
+        mostrar: true,
+        mensaje: "Este producto no tiene imagen asociada",
+        tipo: "advertencia",
+      });
+      return;
+    }
+    setProductoQR(producto);
+    setMostrarModalQR(true);
+  };
+
+  const copiarProducto = async (producto) => {
+    if (!producto) return;
+    const texto = `ID: ${producto.id_producto}\nProducto: ${producto.nombre_producto}\nDescripción: ${producto.descripcion_producto || "Sin descripción"}\nPrecio: C$ ${parseFloat(producto.precio_producto).toFixed(2)}\nCategoría: ${producto.categorias?.nombre_categoria || "Sin categoría"}`;
+    try {
+      await navigator.clipboard.writeText(texto);
+      setToast({
+        mostrar: true,
+        mensaje: `Producto "${producto.nombre_producto}" copiado al portapapeles`,
+        tipo: "exito",
+      });
+    } catch (err) {
+      console.error("Error al copiar:", err);
+      setToast({
+        mostrar: true,
+        mensaje: "No se pudo copiar al portapapeles",
+        tipo: "error",
+      });
+    }
+  };
 
   return (
     <Container className="mt-3 mb-5">
@@ -100,6 +137,8 @@ const Productos = () => {
               productos={productosPaginados}
               abrirModalEdicion={abrirModalEdicion}
               abrirModalEliminacion={abrirModalEliminacion}
+              copiarProducto={copiarProducto}
+              generarQRImagen={generarQRImagen}
             />
           </Col>
           <Col lg={12} className="d-none d-lg-block">
@@ -107,6 +146,8 @@ const Productos = () => {
               productos={productosPaginados}
               abrirModalEdicion={abrirModalEdicion}
               abrirModalEliminacion={abrirModalEliminacion}
+              copiarProducto={copiarProducto}
+              generarQRImagen={generarQRImagen}
             />
           </Col>
         </Row>
@@ -144,6 +185,13 @@ const Productos = () => {
         categorias={categorias}
         cargarProductos={cargarProductos}
         setToast={setToast}
+      />
+
+      {/* Modal QR */}
+      <ModalQRProducto
+        mostrar={mostrarModalQR}
+        onHide={() => setMostrarModalQR(false)}
+        producto={productoQR}
       />
 
       {/* Modal Eliminación */}

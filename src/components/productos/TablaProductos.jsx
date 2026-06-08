@@ -1,7 +1,7 @@
 import React from "react";
 import { Table, Button } from "react-bootstrap";
 
-const TablaProductos = ({ productos, abrirModalEdicion, abrirModalEliminacion }) => (
+const TablaProductos = ({ productos, abrirModalEdicion, abrirModalEliminacion, copiarProducto, generarQRImagen }) => (
   <Table striped borderless hover responsive size="sm" className="app-tabla mb-0">
     <thead>
       <tr>
@@ -50,6 +50,24 @@ const TablaProductos = ({ productos, abrirModalEdicion, abrirModalEliminacion })
               onClick={() => abrirModalEliminacion(producto)}
             >
               <i className="bi bi-trash"></i>
+            </Button>
+            <Button
+              variant="outline-success"
+              size="sm"
+              className="ms-1"
+              onClick={() => copiarProducto(producto)}
+              title="Copiar al portapapeles"
+            >
+              <i className="bi bi-clipboard"></i>
+            </Button>
+            <Button
+              variant="outline-primary"
+              size="sm"
+              className="ms-1"
+              onClick={() => generarQRImagen(producto)}
+              title="Generar código QR de la imagen"
+            >
+              <i className="bi bi-qr-code"></i>
             </Button>
           </td>
         </tr>

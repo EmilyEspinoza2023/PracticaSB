@@ -3,11 +3,13 @@ import { Container, Row, Col, Button, Spinner, Alert } from "react-bootstrap";
 import { supabase } from "../assets/database/supabaseconfig";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import emailjs from "@emailjs/browser";
 
 import TarjetaCategoria from "../components/categorias/TarjetaCategoria";
 import ModalRegistroCategoria from "../components/categorias/ModalRegistroCategoria";
 import ModalEdicionCategoria from "../components/categorias/ModalEdicionCategoria";
 import ModalEliminacionCategoria from "../components/categorias/ModalEliminacionCategoria";
+import ModalEnvioCorreoCategorias from "../components/categorias/ModalEnvioCorreoCategorias";
 import TablaCategorias from "../components/categorias/TablaCategorias";
 import NotificacionOperacion from "../components/NotificacionOperacion";
 import CuadroBusquedas from "../components/busquedas/CuadroBusquedas";
@@ -42,6 +44,81 @@ const Categorias = () => {
   // Variables de estado para paginación
   const [registrosPorPagina, establecerRegistrosPorPagina] = useState(5);
   const [paginaActual, establecerPaginaActual] = useState(1);
+
+  // Variables de estado para envío de correo
+  const [mostrarModalCorreo, setMostrarModalCorreo] = useState(false);
+  const [emailDestino, setEmailDestino] = useState("");
+  const [enviandoCorreo, setEnviandoCorreo] = useState(false);
+
+  // Inicializar EmailJS
+  useEffect(() => {
+    emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
+  }, []);
+
+  const abrirModalCorreo = () => {
+    setEmailDestino("");
+    setMostrarModalCorreo(true);
+  };
+
+  const formatearCategoriasParaCorreo = () => {
+    if (categorias.length === 0) return "No hay categorías registradas.";
+    let texto = `LISTADO DE CATEGORÍAS\n\n`;
+    texto += `Fecha: ${new Date().toLocaleDateString("es-NI")}\n`;
+    texto += `Total de categorías: ${categorias.length}\n\n`;
+    categorias.forEach((cat, index) => {
+      texto += `${index + 1}. ${cat.nombre_categoria}\n`;
+      if (cat.descripcion_categoria) {
+        texto += `   Descripción: ${cat.descripcion_categoria}\n`;
+      }
+      texto += `\n`;
+    });
+    return texto;
+  };
+
+  const enviarCorreoCategorias = () => {
+    if (!emailDestino.trim()) {
+      setToast({
+        mostrar: true,
+        mensaje: "Por favor ingresa un correo destino.",
+        tipo: "advertencia",
+      });
+      return;
+    }
+    setEnviandoCorreo(true);
+    const mensaje = formatearCategoriasParaCorreo();
+    const templateParams = {
+      to_name: "Administrador",
+      user_email: emailDestino,
+      message: mensaje,
+      fecha_envio: new Date().toLocaleDateString("es-NI"),
+    };
+    emailjs
+      .send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        templateParams
+      )
+      .then(() => {
+        setToast({
+          mostrar: true,
+          mensaje: "Correo enviado correctamente.",
+          tipo: "exito",
+        });
+        setMostrarModalCorreo(false);
+        setEmailDestino("");
+      })
+      .catch((error) => {
+        console.error("Error EmailJS:", error);
+        setToast({
+          mostrar: true,
+          mensaje: "Error al enviar el correo.",
+          tipo: "error",
+        });
+      })
+      .finally(() => {
+        setEnviandoCorreo(false);
+      });
+  };
 
   // Métodos de apertura de modales
   const generarPDFCategoria = (categoria) => {
@@ -234,6 +311,10 @@ const Categorias = () => {
             <i className="bi bi-file-earmark-pdf me-1"></i>
             <span className="d-none d-sm-inline">Exportar PDF</span>
           </Button>
+          <Button variant="primary" onClick={abrirModalCorreo} disabled={categorias.length === 0}>
+            <i className="bi bi-envelope me-1"></i>
+            <span className="d-none d-lg-inline">Enviar por Correo</span>
+          </Button>
           <Button onClick={() => setMostrarModal(true)}>
             <i className="bi-plus-lg me-1"></i>
             <span className="d-none d-sm-inline">Nueva Categoría</span>
@@ -325,6 +406,17 @@ const Categorias = () => {
         setCategoriaEditar={setCategoriaEditar}
         cargarCategorias={cargarCategorias}
         setToast={setToast}
+      />
+
+      {/* Modal de Envío de Correo */}
+      <ModalEnvioCorreoCategorias
+        mostrarModalCorreo={mostrarModalCorreo}
+        setMostrarModalCorreo={setMostrarModalCorreo}
+        emailDestino={emailDestino}
+        setEmailDestino={setEmailDestino}
+        enviandoCorreo={enviandoCorreo}
+        enviarCorreoCategorias={enviarCorreoCategorias}
+        totalCategorias={categorias.length}
       />
 
       {/* Modal de Eliminación */}

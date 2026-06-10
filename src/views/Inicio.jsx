@@ -517,13 +517,13 @@ const Inicio = () => {
                     />
                   </LineChart>
                 </ResponsiveContainer>
+                <div className="p-3 text-center">
+                  <Button variant="outline-danger" onClick={generarPdfVentasHora}>
+                    <i className="bi bi-file-earmark-pdf me-2"></i>
+                    Descargar PDF
+                  </Button>
+                </div>
               </Card.Body>
-              <div className="p-3 text-center">
-                <Button variant="outline-danger" onClick={generarPdfVentasHora}>
-                  <i className="bi bi-file-earmark-pdf me-2"></i>
-                  Descargar PDF
-                </Button>
-              </div>
             </Card>
           </Col>
           <Col lg={4}>
@@ -556,13 +556,13 @@ const Inicio = () => {
                     <Tooltip formatter={(v) => `C$ ${v}`} />
                   </PieChart>
                 </ResponsiveContainer>
+                <div className="p-3 text-center">
+                  <Button variant="outline-danger" onClick={generarPdfVentasCategoria}>
+                    <i className="bi bi-file-earmark-pdf me-2"></i>
+                    Descargar PDF
+                  </Button>
+                </div>
               </Card.Body>
-              <div className="p-3 text-center">
-                <Button variant="outline-danger" onClick={generarPdfVentasCategoria}>
-                  <i className="bi bi-file-earmark-pdf me-2"></i>
-                  Descargar PDF
-                </Button>
-              </div>
             </Card>
           </Col>
         </Row>
